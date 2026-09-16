@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f3ee">
+<title>Ежемесячный духовный отчёт | Monthly Spiritual Report | Raport Spiritual Lunar</title>
+<style>
+  :root {
+    --bg: #f7f1e6;
+    --card: rgba(255,253,248,.96);
+    --text: #332b24;
+    --muted: #766b5f;
+    --border: #dfd2c0;
+    --accent: #9b5b25;
+    --accent-dark: #7d4318;
+    --saffron: #c77b2d;
+    --gold: #c49a45;
+    --soft: #f4e7d4;
+    --green: #667653;
+    --shadow: 0 10px 35px rgba(82,54,25,.09);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(199,123,45,.11), transparent 28%),
+      radial-gradient(circle at 90% 8%, rgba(196,154,69,.10), transparent 24%),
+      linear-gradient(180deg, #f8f2e9 0%, #f5eee3 100%);
+  }
+  .wrap { max-width: 850px; margin: 0 auto; padding: 24px 14px 60px; }
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 10px 8px 4px;
+  }
+  .om {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(155,91,37,.28);
+    border-radius: 50%;
+    color: var(--accent);
+    background: rgba(255,253,248,.72);
+    font-family: Georgia, serif;
+    font-size: 29px;
+    box-shadow: 0 4px 16px rgba(82,54,25,.08);
+  }
+  h1 { margin: 0 0 6px; font-size: clamp(25px, 7vw, 36px); letter-spacing: -.02em; }
+  .subtitle { color: var(--muted); margin: 0; font-size: 15px; }
+
+  /* Language Switcher */
+  .lang-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn:hover {
+    border-color: var(--accent);
+    background: var(--soft);
+  }
+  .lang-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 21px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+  }
+  .meta-card {
+    border-top: 3px solid var(--saffron);
+  }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label.meta-label { display:block; font-weight: 650; margin-bottom: 6px; }
+  input, textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+    padding: 12px 13px;
+    outline: none;
+  }
+  input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,94,52,.10); }
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.55;
+  }
+  textarea::placeholder, input::placeholder { color: #a39a90; }
+  .question-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--saffron), var(--gold));
+    opacity: .65;
+  }
+  .question-number {
+    display: inline-block;
+    color: var(--accent);
+    background: var(--soft);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 9px;
+  }
+  .question { font-size: 17px; font-weight: 720; margin-bottom: 8px; line-height: 1.45; }
+  .hint { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+  .progress {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(248,242,233,.91);
+    backdrop-filter: blur(12px);
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(223,210,192,.7);
+  }
+  .progress-inner { max-width: 850px; margin:auto; padding: 0 14px; }
+  .bar { height: 7px; background: #e4dace; border-radius: 20px; overflow:hidden; }
+  .fill { height:100%; width:0; background: linear-gradient(90deg, var(--saffron), var(--gold)); transition: width .2s; }
+  .progress-text { font-size: 13px; color:var(--muted); margin-top:4px; text-align:right; }
+  .actions {
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+    margin-top: 22px;
+  }
+  button {
+    border: 0; border-radius: 13px; padding: 13px 18px;
+    font: inherit; font-weight: 750; cursor:pointer;
+    transition: transform .12s, box-shadow .12s, background .12s;
+  }
+  button:active { transform: translateY(1px); }
+  button:focus-visible { outline: 3px solid rgba(155,91,37,.25); outline-offset: 2px; }
+  .primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color:#fff;
+    box-shadow: 0 5px 15px rgba(125,67,24,.20);
+  }
+  .primary:hover { background: var(--accent-dark); }
+  .secondary { background:var(--soft); color:var(--text); }
+  .danger { background:#eee7e1; color:#7a3528; }
+  #resultCard { display:none; }
+  #report {
+    white-space: pre-wrap;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    max-height:65vh;
+    overflow:auto;
+    font-family: inherit;
+  }
+  .notice {
+    margin-top:12px; padding:12px 14px; border-radius:13px;
+    background:var(--soft); color:var(--muted); font-size:13px;
+    border: 1px solid rgba(196,154,69,.18);
+  }
+  .footer-mantra {
+    text-align:center;
+    color:var(--muted);
+    font-family: Georgia, serif;
+    font-size: 14px;
+    margin: 25px 0 0;
+  }
+  @media (max-width: 620px) {
+    .wrap { padding-top: 16px; }
+    .meta { grid-template-columns: 1fr; }
+    .card { padding: 16px; border-radius: 15px; }
+    textarea { min-height: 170px; }
+    button { width:100%; }
+    .lang-btn { font-size: 13px; padding: 6px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress">
+  <div class="progress-inner">
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="progress-text" id="progressText">Заполнено: 0 из 20</div>
+  </div>
+</div>
+
+<main class="wrap">
+  <header>
+    <div class="om">ॐ</div>
+    <h1 id="mainTitle">Ежемесячный духовный отчёт</h1>
+    <p class="subtitle" id="mainSubtitle">Самоанализ • духовная практика • служение • осознания</p>
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="switchLanguage('ru')" id="btn-ru">🇷🇺 Русский</button>
+      <button class="lang-btn" onclick="switchLanguage('en')" id="btn-en">🇬🇧 English</button>
+      <button class="lang-btn" onclick="switchLanguage('ro')" id="btn-ro">🇷🇴 Română</button>
+    </div>
+  </header>
+
+  <section class="card meta-card">
+    <div class="meta">
+      <div>
+        <label class="meta-label" for="name" id="labelName">Имя</label>
+        <input id="name" type="text" autocomplete="name" placeholder="Ваше имя">
+      </div>
+      <div>
+        <label class="meta-label" for="period" id="labelPeriod">Период отчёта</label>
+        <input id="period" type="text" placeholder="Например: сентябрь 2026">
+      </div>
+    </div>
+    <div class="notice" id="noticeText">Ответы автоматически сохраняются в этом браузере. Они никуда не отправляются.</div>
+  </section>
+
+  <div id="questions"></div>
+
+  <div class="actions">
+    <button class="primary" id="generateBtn">Сформировать отчёт</button>
+    <button class="danger" id="clearBtn" type="button">Очистить форму</button>
+  </div>
+
+  <section class="card" id="resultCard">
+    <h2 id="resultTitle">Готовый отчёт</h2>
+    <p class="subtitle" id="resultSubtitle">Проверьте текст перед отправкой.</p>
+    <div id="report"></div>
+    <div class="actions">
+      <button class="primary" id="copyBtn">📋 Скопировать отчёт</button>
+      <button class="secondary" id="downloadBtn">Скачать TXT</button>
+      <button class="secondary" id="editBtn">← Вернуться к редактированию</button>
+    </div>
+    <div class="notice" id="copyStatus"></div>
+  </section>
+</main>
+
+<script>
+// ==================== ПЕРЕВОДЫ / TRANSLATIONS / TRADUCERI ====================
+
+const translations = {
+  ru: {
+    title: "Ежемесячный духовный отчёт",
+    subtitle: "Самоанализ • духовная практика • служение • осознания",
+    name: "Имя",
+    namePlaceholder: "Ваше имя",
+    period: "Период отчёта",
+    periodPlaceholder: "Например: сентябрь 2026",
+    notice: "Ответы автоматически сохраняются в этом браузере. Они никуда не отправляются.",
+    question: "Вопрос",
+    yourAnswer: "Ваш ответ...",
+    generateBtn: "Сформировать отчёт",
+    clearBtn: "Очистить форму",
+    resultTitle: "Готовый отчёт",
+    resultSubtitle: "Проверьте текст перед отправкой.",
+    copyBtn: "📋 Скопировать отчёт",
+    downloadBtn: "Скачать TXT",
+    editBtn: "← Вернуться к редактированию",
+    progressText: "Заполнено",
+    of: "из",
+    copied: "✓ Отчёт скопирован. Теперь его можно вставить в Telegram, WhatsApp, email или документ.",
+    copiedSimple: "✓ Отчёт скопирован.",
+    clearConfirm: "Удалить все ответы и очистить форму?",
+    reportTitle: "ЕЖЕМЕСЯЧНЫЙ ДУХОВНЫЙ ОТЧЁТ",
+    nameLabel: "Имя",
+    periodLabel: "Период",
+    answerLabel: "Ответ",
+    noAnswer: "—",
+    questions: [
+      `Как ваше здоровье и что вы регулярно делаете для поддержания здоровья тела
+(упражнения, йога, бег, тренировки, плавание, садоводство и т.д.)?`,
+
+      `Каковы ваши отношения с членами семьи в целом, особенно с мужем или женой и детьми
+(для тех, кто состоит в браке и имеет детей)?`,
+
+      `Для грихастх: где вы сейчас работаете, как идут дела в профессиональной сфере и каковы
+ваши размышления или осознания при исполнении обязанностей грихастха-дхармы?`,
+
+      `Каковы ваши отношения с местным духовным наставником (как часто вы лично
+встречаетесь, насколько глубоки ваши отношения и чему вы недавно научились у него или
+неё)?`,
+
+      `Если вы получили служение духовного наставника или координатора: каковы ваши
+последние осознания во взаимоотношениях с вашими подопечными?`,
+
+      `Каковы ваши отношения с духовными братьями и духовными сёстрами (как часто вы
+поддерживаете связь и с кем регулярно общаетесь)?`,
+
+      `Каково ваше участие в воскресных программах, организуемых в местных храмах или
+общинах, и каково качество ваших отношений, дружбы и служения местным вайшнавам во
+время этих программ?`,
+
+      `Есть ли у вас ежедневная утренняя программа перед домашним алтарём или домашними
+Божествами? Если да, пожалуйста, опишите вашу нынешнюю программу, внутреннюю
+медитацию и осознания, которые вдохновляют вас продолжать.`,
+
+      `Каково качество, внимательность и внутренняя медитация во время ежедневного
+повторения 16 кругов джапы?`,
+
+      `Для учеников, получивших мантра-дикшу — второе посвящение: удаётся ли вам
+ежедневно повторять Гаятри-мантры в надлежащее время (сандхья)? Каковы ваше текущее
+качество, внимание и внутренняя медитация при повторении Гаятри-мантр?`,
+
+      `В каких вайшнавских образовательных программах вы сейчас участвуете (Бхакти-шастри,
+Бхакти-вайбхава, Школа Бхакти, Школа джапы и т.д.)?`,
+
+      `Какие шастры или книги Шрилы Прабхупады вы сейчас изучаете? Каковы ваши
+последние успехи в личном изучении? Какие стихи вы недавно выучили? Какие бхаджаны
+вы недавно выучили? Какие ещё действия вы регулярно предпринимаете для философского
+и духовного развития?`,
+
+      `Какие видео- или аудиосеминары вы слушали недавно? Какие моменты, навыки и
+вдохновляющие истины вы недавно узнали, слушая мои семинары, а также семинары вашего
+Парам Гурудева, лекции Шрилы Прабхупады или лекции других старших вайшнавов?`,
+
+      `Какие регулярные практические виды преданного служения (сева) вам поручены
+старшими вайшнавами и которые вы выполняете для местного храма и вайшнавской
+общины, к которой принадлежите?`,
+
+      `Какие храмовые или проповеднические проекты вы поддерживаете регулярными
+пожертвованиями?`,
+
+      `Какие проповеднические программы вы развиваете лично и в каких местных
+проповеднических проектах участвуете, желая поддержать миссию Шрилы Прабхупады?`,
+
+      `Каково общее состояние вашего энтузиазма в сознании Кришны?`,
+
+      `Каковы ваша внутренняя медитация, устремления и качества характера преданного,
+которые вы стремитесь развивать сейчас?`,
+
+      `Насколько последовательно вы отслеживаете духовную практику, заполняя садхана-чарт?
+Если с этим есть трудности, какие препятствия вы встречаете? Если вам удаётся вести его
+длительное время, каковы ваши последние достижения, связанные с этой практикой?`,
+
+      `Помимо вышеуказанных аспектов, если вы считаете, что есть что-то ещё — идеи,
+вдохновения, сомнения или важные внутренние чувства, которыми вы хотели бы поделиться
+со мной в этом отчёте, пожалуйста, опишите это здесь. При необходимости мы найдём время
+и обсудим это.`
+    ],
+    hints: {
+      3: "Если вы не грихастха, этот вопрос можно оставить пустым.",
+      5: "Если вам не поручено такое служение, этот вопрос можно оставить пустым.",
+      10: "Если у вас нет мантра-дикши (второго посвящения), этот вопрос можно оставить пустым."
+    }
+  },
+
+  en: {
+    title: "Monthly Spiritual Report",
+    subtitle: "Self-analysis • spiritual practice • service • realizations",
+    name: "Name",
+    namePlaceholder: "Your name",
+    period: "Report period",
+    periodPlaceholder: "For example: September 2026",
+    notice: "Answers are automatically saved in this browser. They are not sent anywhere.",
+    question: "Question",
+    yourAnswer: "Your answer...",
+    generateBtn: "Generate Report",
+    clearBtn: "Clear Form",
+    resultTitle: "Ready Report",
+    resultSubtitle: "Check the text before sending.",
+    copyBtn: "📋 Copy Report",
+    downloadBtn: "Download TXT",
+    editBtn: "← Back to editing",
+    progressText: "Completed",
+    of: "of",
+    copied: "✓ Report copied. Now you can paste it into Telegram, WhatsApp, email or a document.",
+    copiedSimple: "✓ Report copied.",
+    clearConfirm: "Delete all answers and clear the form?",
+    reportTitle: "MONTHLY SPIRITUAL REPORT",
+    nameLabel: "Name",
+    periodLabel: "Period",
+    answerLabel: "Answer",
+    noAnswer: "—",
+    questions: [
+      `How is your health and what do you regularly do to maintain physical health
+(exercises, yoga, running, training, swimming, gardening, etc.)?`,
+
+      `How are your relationships with family members in general, especially with your
+husband or wife and children (for those who are married and have children)?`,
+
+      `For grihasthas: where do you currently work, how are things in your professional
+sphere, and what are your reflections or realizations while performing grihastha-dharma
+duties?`,
+
+      `How are your relationships with your local spiritual mentor (how often do you meet
+personally, how deep are your relationships, and what have you recently learned from
+him or her)?`,
+
+      `If you have received the service of being a spiritual mentor or coordinator: what are
+your recent realizations in relationships with your mentees?`,
+
+      `How are your relationships with spiritual brothers and sisters (how often do you
+maintain contact and with whom do you regularly communicate)?`,
+
+      `What is your participation in Sunday programs organized in local temples or
+communities, and how is the quality of your relationships, friendship, and service to local
+Vaishnavas during these programs?`,
+
+      `Do you have a daily morning program in front of your home altar or home Deities?
+If yes, please describe your current program, internal meditation, and realizations that
+inspire you to continue.`,
+
+      `What is the quality, attentiveness, and internal meditation during the daily chanting
+of 16 rounds of japa?`,
+
+      `For disciples who have received mantra-diksha — second initiation: do you manage to
+daily chant the Gayatri mantras at the appropriate time (sandhya)? What is your current
+quality, attention, and internal meditation while chanting the Gayatri mantras?`,
+
+      `In which Vaishnava educational programs are you currently participating (Bhakti-shastri,
+Bhakti-vaibhava, School of Bhakti, Japa School, etc.)?`,
+
+      `Which scriptures or books by Srila Prabhupada are you currently studying? What are
+your recent achievements in personal study? Which verses have you recently memorized?
+Which bhajans have you recently learned? What other actions do you regularly take for
+philosophical and spiritual development?`,
+
+      `Which video or audio seminars have you listened to recently? What moments, skills,
+and inspiring truths have you recently learned while listening to my seminars, as well as
+seminars by your Param Gurudeva, lectures by Srila Prabhupada, or lectures by other
+senior Vaishnavas?`,
+
+      `What regular practical types of devotional service (seva) have been assigned to you
+by senior Vaishnavas that you perform for the local temple and the Vaishnava community
+to which you belong?`,
+
+      `Which temple or preaching projects do you support with regular donations?`,
+
+      `Which preaching programs do you personally develop and in which local preaching
+projects do you participate, wishing to support Srila Prabhupada's mission?`,
+
+      `What is the general state of your enthusiasm in Krishna consciousness?`,
+
+      `What are your internal meditation, aspirations, and qualities of a devotee's character
+that you are striving to develop now?`,
+
+      `How consistently do you track your spiritual practice by filling out the sadhana chart?
+If there are difficulties with this, what obstacles do you encounter? If you have been
+keeping it for a long time, what are your recent achievements related to this practice?`,
+
+      `Besides the above aspects, if you believe there is something else — ideas, inspirations,
+doubts, or important inner feelings you would like to share with me in this report,
+please describe it here. If necessary, we will find time and discuss it.`
+    ],
+    hints: {
+      3: "If you are not a grihastha, you can leave this question empty.",
+      5: "If you have not been assigned such service, you can leave this question empty.",
+      10: "If you do not have mantra-diksha (second initiation), you can leave this question empty."
+    }
+  },
+
+  ro: {
+    title: "Raport Spiritual Lunar",
+    subtitle: "Autoanaliză • practică spirituală • serviciu • realizări",
+    name: "Nume",
+    namePlaceholder: "Numele dvs.",
+    period: "Perioada raportului",
+    periodPlaceholder: "De exemplu: septembrie 2026",
+    notice: "Răspunsurile sunt salvate automat în acest browser. Ele nu sunt trimise nicăieri.",
+    question: "Întrebare",
+    yourAnswer: "Răspunsul dvs...",
+    generateBtn: "Generează Raportul",
+    clearBtn: "Șterge Formularul",
+    resultTitle: "Raport Finalizat",
+    resultSubtitle: "Verificați textul înainte de a-l trimite.",
+    copyBtn: "📋 Copiază Raportul",
+    downloadBtn: "Descarcă TXT",
+    editBtn: "← Înapoi la editare",
+    progressText: "Completat",
+    of: "din",
+    copied: "✓ Raport copiat. Acum îl puteți lipi în Telegram, WhatsApp, email sau un document.",
+    copiedSimple: "✓ Raport copiat.",
+    clearConfirm: "Ștergeți toate răspunsurile și goliți formularul?",
+    reportTitle: "RAPORT SPIRITUAL",
+    nameLabel: "Nume",
+    periodLabel: "Perioada",
+    answerLabel: "Răspuns",
+    noAnswer: "—",
+    questions: [
+      `Cum este sănătatea dvs. și ce faceți regulat pentru menținerea sănătății fizice
+(exerciții, yoga, alergare, antrenamente, înot, grădinărit etc.)?`,
+
+      `Cum sunt relațiile dvs. cu membrii familiei în general, în special cu soțul sau soția
+și copiii (pentru cei căsătoriți și care au copii)?`,
+
+      `Pentru grihastha: unde lucrați în prezent, cum merg lucrurile în sfera profesională
+și care sunt reflecțiile sau realizările dvs. în timpul îndeplinirii îndatoririlor grihastha-dharma?`,
+
+      `Cum sunt relațiile dvs. cu mentorul spiritual local (cât de des vă întâlniți personal,
+cât de profunde sunt relațiile dvs. și ce ați învățat recent de la el sau ea)?`,
+
+      `Dacă ați primit serviciul de mentor spiritual sau coordonator: care sunt realizările
+dvs. recente în relațiile cu cei pe care îi îndrumați?`,
+
+      `Cum sunt relațiile dvs. cu frații și surorile spirituale (cât de des mențineți legătura
+și cu cine comunicați regulat)?`,
+
+      `Care este participarea dvs. la programele de duminică organizate în templele sau
+comunitățile locale și care este calitatea relațiilor dvs., prieteniei și serviciului față de
+vaishnavai locali în timpul acestor programe?`,
+
+      `Aveți un program zilnic de dimineață în fața altarului casei sau a Divinităților
+casnice? Dacă da, vă rugăm să descrieți programul dvs. actual, meditația internă și
+realizările care vă inspiră să continuați.`,
+
+      `Care este calitatea, atenția și meditația internă în timpul repetării zilnice a 16
+runde de japa?`,
+
+      `Pentru discipolii care au primit mantra-diksha — a doua inițiere: reușiți să repetați
+zilnic mantrale Gayatri la momentul potrivit (sandhya)? Care este calitatea dvs. actuală,
+atenția și meditația internă în timpul repetării mantralelor Gayatri?`,
+
+      `În ce programe educaționale vaishnava participați în prezent (Bhakti-shastri,
+Bhakti-vaibhava, Școala Bhakti, Școala Japa etc.)?`,
+
+      `Ce scripturi sau cărți ale lui Srila Prabhupada studiați în prezent? Care sunt
+succesele dvs. recente în studiul personal? Ce versuri ați memorat recent? Ce bhajane
+ați învățat recent? Ce alte acțiuni întreprindeți regulat pentru dezvoltarea filozofică
+și spirituală?`,
+
+      `Ce seminarii video sau audio ați ascultat recent? Ce momente, abilități și adevăruri
+inspiratoare ați învățat recent, ascultând seminariile mele, precum și seminariile
+Param Gurudeva dvs., prelegerile lui Srila Prabhupada sau prelegerile altor vaishnavai
+seniori?`,
+
+      `Ce tipuri practice regulate de serviciu devoțional (seva) v-au fost încredințate de
+vaishnavai seniori și pe care le îndepliniți pentru templul local și comunitatea vaishnava
+căreia îi aparțineți?`,
+
+      `Ce proiecte de templu sau de predicare susțineți cu donații regulate?`,
+
+      `Ce programe de predicare dezvoltați personal și în ce proiecte locale de predicare
+participați, dorind să susțineți misiunea lui Srila Prabhupada?`,
+
+      `Care este starea generală a entuziasmului dvs. în conștiența lui Krishna?`,
+
+      `Care sunt meditația dvs. internă, aspirațiile și calitățile caracterului unui devot
+pe care vă străduiți să le dezvoltați acum?`,
+
+      `Cât de consecvent vă urmăriți practica spirituală completând diagrama sadhana?
+Dacă există dificultăți cu acest lucru, ce obstacole întâmpinați? Dacă reușiți să o țineți
+mult timp, care sunt realizările dvs. recente legate de această practică?`,
+
+      `Pe lângă aspectele menționate mai sus, dacă credeți că mai este ceva — idei,
+inspirații, îndoieli sau sentimente interioare importante pe care doriți să le împărtășiți
+cu mine în acest raport, vă rugăm să le descrieți aici. Dacă este necesar, vom găsi timp
+și vom discuta.`
+    ],
+    hints: {
+      3: "Dacă nu sunteți grihastha, puteți lăsa această întrebare goală.",
+      5: "Dacă nu v-a fost încredințat un astfel de serviciu, puteți lăsa această întrebare goală.",
+      10: "Dacă nu aveți mantra-diksha (a doua inițiere), puteți lăsa această întrebare goală."
+    }
+  }
+};
+
+// ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+
+let currentLang = localStorage.getItem('spiritualReportLang') || 'ru';
+let questions = [];
+
+// ==================== ФУНКЦИИ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА ====================
+
+function switchLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('spiritualReportLang', lang);
+
+  // Обновляем кнопки
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  document.getElementById('btn-' + lang).classList.add('active');
+
+  // Обновляем текст интерфейса
+  updateInterface();
+
+  // Пересоздаём вопросы
+  renderQuestions();
+
+  // Восстанавливаем ответы
+  loadAnswers();
+}
+
+function updateInterface() {
+  const t = translations[currentLang];
+
+  document.getElementById('mainTitle').textContent = t.title;
+  document.getElementById('mainSubtitle').textContent = t.subtitle;
+  document.getElementById('labelName').textContent = t.name;
+  document.getElementById('name').placeholder = t.namePlaceholder;
+  document.getElementById('labelPeriod').textContent = t.period;
+  document.getElementById('period').placeholder = t.periodPlaceholder;
+  document.getElementById('noticeText').textContent = t.notice;
+  document.getElementById('generateBtn').textContent = t.generateBtn;
+  document.getElementById('clearBtn').textContent = t.clearBtn;
+  document.getElementById('resultTitle').textContent = t.resultTitle;
+  document.getElementById('resultSubtitle').textContent = t.resultSubtitle;
+  document.getElementById('copyBtn').textContent = t.copyBtn;
+  document.getElementById('downloadBtn').textContent = t.downloadBtn;
+  document.getElementById('editBtn').textContent = t.editBtn;
+
+  // Обновляем прогресс
+  updateProgress();
+}
+
+function renderQuestions() {
+  const t = translations[currentLang];
+  questions = t.questions;
+
+  const container = document.getElementById('questions');
+  container.innerHTML = '';
+
+  questions.forEach((q, i) => {
+    const card = document.createElement('section');
+    card.className = 'card question-card';
+    const hintText = t.hints[i + 1] || '';
+    card.innerHTML = `
+      <div class="question-number">${t.question} ${i + 1}</div>
+      <div class="question">${q}</div>
+      ${hintText ? `<div class="hint">${hintText}</div>` : ''}
+      <textarea id="answer-${i}" placeholder="${t.yourAnswer}"></textarea>
+    `;
+    container.appendChild(card);
+  });
+
+  // Добавляем обработчики сохранения
+  document.querySelectorAll('textarea[id^="answer-"]').forEach(ta => {
+    ta.addEventListener('input', save);
+  });
+}
+
+// ==================== РАБОТА С ДАННЫМИ ====================
+
+const nameEl = document.getElementById('name');
+const periodEl = document.getElementById('period');
+
+function answers() {
+  return questions.map((_, i) => {
+    const el = document.getElementById(`answer-${i}`);
+    return el ? el.value : '';
+  });
+}
+
+function save() {
+  const data = { 
+    name: nameEl.value, 
+    period: periodEl.value, 
+    answers: answers(),
+    lang: currentLang
+  };
+  localStorage.setItem('spiritualReportDraft', JSON.stringify(data));
+  updateProgress();
+}
+
+function loadAnswers() {
+  const raw = localStorage.getItem('spiritualReportDraft');
+  if (!raw) {
+    updateProgress();
+    return;
+  }
+  try {
+    const data = JSON.parse(raw);
+    nameEl.value = data.name || '';
+    periodEl.value = data.period || '';
+    (data.answers || []).forEach((a, i) => {
+      const el = document.getElementById(`answer-${i}`);
+      if (el) el.value = a || '';
+    });
+  } catch(e) {}
+  updateProgress();
+}
+
+function updateProgress() {
+  const t = translations[currentLang];
+  const count = answers().filter(x => x.trim()).length;
+  document.getElementById('progressText').textContent = `${t.progressText}: ${count} ${t.of} ${questions.length}`;
+  document.getElementById('fill').style.width = `${count / questions.length * 100}%`;
+}
+
+function makeReport() {
+  const t = translations[currentLang];
+  const name = nameEl.value.trim() || t.noAnswer;
+  const period = periodEl.value.trim() || t.noAnswer;
+  const a = answers();
+
+  let text = `${t.reportTitle}\n\n`;
+  text += `${t.nameLabel}: ${name}\n`;
+  text += `${t.periodLabel}: ${period}\n\n`;
+  text += `${'='.repeat(60)}\n\n`;
+
+  questions.forEach((q, i) => {
+    text += `${i + 1}. ${q.replace(/\n/g, ' ')}\n\n`;
+    text += `${t.answerLabel}:\n${a[i].trim() || t.noAnswer}\n\n`;
+  });
+
+  return text.trim();
+}
+
+// ==================== ОБРАБОТЧИКИ СОБЫТИЙ ====================
+
+nameEl.addEventListener('input', save);
+periodEl.addEventListener('input', save);
+
+document.getElementById('generateBtn').addEventListener('click', () => {
+  const report = makeReport();
+  document.getElementById('report').textContent = report;
+  document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const t = translations[currentLang];
+  const text = document.getElementById('report').textContent;
+  const status = document.getElementById('copyStatus');
+  try {
+    await navigator.clipboard.writeText(text);
+    status.textContent = t.copied;
+  } catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    status.textContent = t.copiedSimple;
+  }
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const text = document.getElementById('report').textContent;
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `otchet-${(nameEl.value.trim() || 'bez-imeni').replace(/\s+/g,'-')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('editBtn').addEventListener('click', () => {
+  document.getElementById('resultCard').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  const t = translations[currentLang];
+  if (!confirm(t.clearConfirm)) return;
+  localStorage.removeItem('spiritualReportDraft');
+  nameEl.value = '';
+  periodEl.value = '';
+  questions.forEach((_, i) => {
+    const el = document.getElementById(`answer-${i}`);
+    if (el) el.value = '';
+  });
+  document.getElementById('resultCard').style.display = 'none';
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+// ==================== ИНИЦИАЛИЗАЦИЯ ====================
+
+// Устанавливаем начальный язык
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.classList.remove('active');
+});
+document.getElementById('btn-' + currentLang).classList.add('active');
+
+// Рендерим интерфейс
+updateInterface();
+renderQuestions();
+loadAnswers();
+</script>
+</body>
+</html>
