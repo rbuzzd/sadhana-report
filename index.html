@@ -653,7 +653,7 @@ function renderQuestions() {
 // ==================== РАБОТА С ДАННЫМИ ====================
 
 const nameEl = document.getElementById('name');
-const periodEl = document.getElementById('period');
+//const periodEl = document.getElementById('period');
 
 function answers() {
   return questions.map((_, i) => {
@@ -665,7 +665,7 @@ function answers() {
 function save() {
   const data = { 
     name: nameEl.value, 
-    period: periodEl.value, 
+    //period: periodEl.value, 
     answers: answers(),
     lang: currentLang
   };
@@ -682,7 +682,7 @@ function loadAnswers() {
   try {
     const data = JSON.parse(raw);
     nameEl.value = data.name || '';
-    periodEl.value = data.period || '';
+    //periodEl.value = data.period || '';
     (data.answers || []).forEach((a, i) => {
       const el = document.getElementById(`answer-${i}`);
       if (el) el.value = a || '';
@@ -701,7 +701,7 @@ function updateProgress() {
 function makeReport() {
   const t = translations[currentLang];
   const name = nameEl.value.trim() || t.noAnswer;
-  const period = periodEl.value.trim() || t.noAnswer;
+  //const period = periodEl.value.trim() || t.noAnswer;
   const a = answers();
 
   let text = `${t.reportTitle}\n\n`;
@@ -768,7 +768,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   if (!confirm(t.clearConfirm)) return;
   localStorage.removeItem('spiritualReportDraft');
   nameEl.value = '';
-  periodEl.value = '';
+  //periodEl.value = '';
   questions.forEach((_, i) => {
     const el = document.getElementById(`answer-${i}`);
     if (el) el.value = '';
